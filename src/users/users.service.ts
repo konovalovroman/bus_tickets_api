@@ -4,17 +4,20 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { TicketsService } from 'src/tickets/tickets.service';
 
 @Injectable()
 export class UsersService {
     constructor(
-      @InjectRepository(User) private readonly usersRepository: Repository<User>
+      @InjectRepository(User) private readonly usersRepository: Repository<User>,
+      private readonly ticketsService: TicketsService,
     ) {}
 
     async create(createUserDto: CreateUserDto) {
       const newUser = await this.usersRepository.create({
         ...createUserDto,
-        admin: false
+        admin: false,
+        tickets: []
       });
       return this.usersRepository.save(newUser);
     }
@@ -54,4 +57,12 @@ export class UsersService {
       const user = await this.findOne(id);
       return this.usersRepository.save({...user, admin: false});
     }
+
+    async buyTicket(userId: number, ticketId: number) { //temp method
+      const user = await this.findOne(userId);
+      const ticket = await this.ticketsService.findOne(ticketId);
+      // user.tickets.push(ticket);
+      console.log(user.tickets)
+      // return this.usersRepository.save(user);
+    } 
 }

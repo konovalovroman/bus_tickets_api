@@ -23,6 +23,11 @@ export class UsersController {
     return this.usersService.removeAdmin(+id);
   }
 
+  @Post('buy_ticket/:userId/:ticketId') // temp route
+  buyTicket(@Param('userId') userId: string, @Param('ticketId') ticketId: string) {
+    return this.usersService.buyTicket(+userId, +ticketId);
+  }
+
   @Get()
   findAll() {
     return this.usersService.findAll();

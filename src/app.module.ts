@@ -6,12 +6,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
 import { City } from './cities/entities/citite.entity';
 import { Bus } from './buses/entities/bus.entity';
+import { TripsModule } from './trips/trips.module';
+import { Trip } from './trips/entities/trip.entity';
+import { TicketsModule } from './tickets/tickets.module';
+import { Ticket } from './tickets/entities/ticket.entity';
 
 @Module({
   imports: [
     UsersModule, 
     BusesModule, 
     CitiesModule,
+    TripsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -24,8 +29,12 @@ import { Bus } from './buses/entities/bus.entity';
         User,
         City,
         Bus,
+        Trip,
+        Ticket,
       ],
-    })],
+    }),
+    TicketsModule,
+    ],
 })
 
 export class AppModule {}

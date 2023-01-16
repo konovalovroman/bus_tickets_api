@@ -7,6 +7,7 @@ import { Bus } from './entities/bus.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Bus])],
   controllers: [BusesController],
-  providers: [BusesService]
+  providers: [BusesService],
+  exports: [BusesService]
 })
 export class BusesModule {}
