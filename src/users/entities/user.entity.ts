@@ -1,5 +1,5 @@
 import { Ticket } from "src/tickets/entities/ticket.entity";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 
 
 @Entity({name: 'users', synchronize: false})
@@ -28,7 +28,27 @@ export class User {
     @Column({ type: 'boolean' })
     admin: boolean;
 
-    @ManyToMany(() => Ticket)
-    @JoinTable({ name: 'users_and_tickets' })
-    tickets: Ticket[]
+    @ManyToMany(() => Ticket, (ticket) => ticket.user, {
+        cascade: true,
+    })
+    @JoinTable({
+        name: "users_and_tickets",
+        joinColumn: {
+            name: "user_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "ticket_id",
+            referencedColumnName: "id"
+
+        }
+    })
+    tickets: Ticket[];
+
+    addTicket(ticket: Ticket) {
+        if (!this.tickets) {
+            this.tickets = new Array<Ticket>();
+        }
+        this.tickets.push(ticket);
+    }
 }

@@ -1,8 +1,11 @@
+import { Logger } from "@nestjs/common";
 import { Trip } from "src/trips/entities/trip.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Table } from "typeorm";
 
 @Entity({ name: 'tickets', synchronize: false })
 export class Ticket {
+
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -21,4 +24,18 @@ export class Ticket {
     @ManyToOne(() => Trip, (trip) => trip.id)
     @JoinColumn({ name: 'trip_id' })
     trip: Trip;
+
+    @ManyToMany(() => User, (user) => user.tickets)
+    @JoinTable({
+        name: "users_and_tickets",
+        joinColumn: {
+            name: "ticket_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "user_id",
+            referencedColumnName: "id"
+        }
+    })
+    user: User;
 }

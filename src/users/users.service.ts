@@ -61,8 +61,8 @@ export class UsersService {
     async buyTicket(userId: number, ticketId: number) { //temp method
       const user = await this.findOne(userId);
       const ticket = await this.ticketsService.findOne(ticketId);
-      // user.tickets.push(ticket);
-      console.log(user.tickets)
-      // return this.usersRepository.save(user);
+      user.addTicket(ticket);
+      return this.usersRepository.save(user);
+      // return user;
     } 
 }
