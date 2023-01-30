@@ -14,7 +14,7 @@ export class TripsService {
     private readonly busesService: BusesService,
   ) {}
 
-  async create(createTripDto: CreateUpdateTripDto) {
+  async create(createTripDto: CreateUpdateTripDto): Promise<Trip> {
     const { from_city_id, to_city_id, bus_id } = createTripDto;
     if (from_city_id === to_city_id) throw new UnprocessableEntityException('From_city can not be equal to To_city');
     const newTrip = new Trip();
@@ -24,7 +24,7 @@ export class TripsService {
     return await this.tripsRepository.save(newTrip);
   }
 
-  async findAll() {
+  async findAll(): Promise<Trip[]> {
     return this.tripsRepository.find({
       relations: [
         'from_city',
@@ -34,7 +34,7 @@ export class TripsService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Trip> {
     const trip = await this.tripsRepository.findOne({
       where: {
         id,
@@ -49,7 +49,7 @@ export class TripsService {
     return trip;
   }
 
-  async update(id: number, updateTripDto: Partial<CreateUpdateTripDto>) {
+  async update(id: number, updateTripDto: Partial<CreateUpdateTripDto>): Promise<Trip> {
     const {from_city_id, to_city_id, bus_id} = updateTripDto;
     const trip = await this.findOne(id);
     if (from_city_id && to_city_id && from_city_id === to_city_id) {
@@ -67,7 +67,7 @@ export class TripsService {
     return await this.tripsRepository.save(trip);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Trip> {
     const trip = await this.findOne(id);
     await this.tripsRepository.delete(id);
     return trip;

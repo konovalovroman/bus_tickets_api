@@ -45,7 +45,7 @@ export class User {
     })
     tickets: Ticket[];
 
-    addTicket(ticket: Ticket) {
+    addTicket(ticket: Ticket): void {
         if (!this.tickets) {
             this.tickets = new Array<Ticket>();
         }

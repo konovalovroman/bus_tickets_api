@@ -10,16 +10,16 @@ export class BusesService {
     @InjectRepository(Bus) private readonly busesRepository: Repository<Bus>,
   ) {}
 
-  async create(createBusDto: CreateUpdateBusDto) {
+  async create(createBusDto: CreateUpdateBusDto): Promise<Bus> {
     const newBus = await this.busesRepository.create(createBusDto);
     return this.busesRepository.save(newBus);
   }
 
-  async findAll() {
+  async findAll(): Promise<Bus[]> {
     return await this.busesRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Bus> {
     const bus = await this.busesRepository.findOne({
       where: {
         id,
@@ -29,13 +29,13 @@ export class BusesService {
     return bus;
   }
 
-  async update(id: number, updateBusDto: Partial<CreateUpdateBusDto>) {
+  async update(id: number, updateBusDto: Partial<CreateUpdateBusDto>): Promise<Bus> {
     const bus = await this.findOne(id);
     Object.assign(bus, updateBusDto);
     return await this.busesRepository.save(bus); 
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Bus> {
     const bus = await this.findOne(id);
     await this.busesRepository.delete(id);
     return bus;

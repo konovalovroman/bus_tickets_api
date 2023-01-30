@@ -10,6 +10,7 @@ import { TripsModule } from './trips/trips.module';
 import { Trip } from './trips/entities/trip.entity';
 import { TicketsModule } from './tickets/tickets.module';
 import { Ticket } from './tickets/entities/ticket.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { Ticket } from './tickets/entities/ticket.entity';
       ],
     }),
     TicketsModule,
+    AuthModule,
     ],
 })
 

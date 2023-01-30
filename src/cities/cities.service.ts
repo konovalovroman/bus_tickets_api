@@ -12,7 +12,7 @@ export class CitiesService {
     private readonly httpService: HttpService,
   ) {}
 
-  async create(createCityDto: CreateCityDto) {
+  async create(createCityDto: CreateCityDto): Promise<City> {
     const newCity = new City();
     await this.httpService.get(`https://api.api-ninjas.com/v1/geocoding?city=${createCityDto.name}&country=ukraine`, {
       headers: {
@@ -29,11 +29,11 @@ export class CitiesService {
     return this.citiesRepository.save(newCity);
   }
 
-  async findAll() {
+  async findAll(): Promise<City[]> {
     return this.citiesRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<City> {
     const city = await this.citiesRepository.findOne({
       where: {
         id,
@@ -43,7 +43,7 @@ export class CitiesService {
     return city;
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<City> {
     const city = await this.findOne(id);
     await this.citiesRepository.delete(id);
     return city;

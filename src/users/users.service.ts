@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,7 +13,7 @@ export class UsersService {
       private readonly ticketsService: TicketsService,
     ) {}
 
-    async create(createUserDto: CreateUserDto) {
+    async create(createUserDto: CreateUserDto): Promise<User> {
       const newUser = await this.usersRepository.create({
         ...createUserDto,
         admin: false,
@@ -22,11 +22,11 @@ export class UsersService {
       return this.usersRepository.save(newUser);
     }
 
-    async findAll() {
+    async findAll(): Promise<User[]> {
       return await this.usersRepository.find();
     }
 
-    async findOne(id: number) {
+    async findOne(id: number): Promise<User> {
       const user = await this.usersRepository.findOne({
         where: {
           id,
@@ -36,29 +36,39 @@ export class UsersService {
       return user;
     }
 
-    async update(id: number, updateUserDto: Partial<UpdateUserDto>) {
+    async findOneByEmail(email: string): Promise<User> {
+      if (!email) throw new UnprocessableEntityException('Email must be given');
+      const user = await this.usersRepository.findOne({
+        where: {
+          email,
+        }
+      });
+      return user;
+    }
+
+    async update(id: number, updateUserDto: Partial<UpdateUserDto>): Promise<User> {
       const user = await this.findOne(id);
       Object.assign(user, updateUserDto);
       return this.usersRepository.save(user);
     }
 
-    async remove(id: number) {
+    async remove(id: number): Promise<User> {
       const user = await this.findOne(id);
       await this.usersRepository.delete(id);
       return user;
     }
 
-    async giveAdmin(id: number) {
+    async giveAdmin(id: number): Promise<User> {
       const user = await this.findOne(id);
       return this.usersRepository.save({...user, admin: true});
     }
 
-    async removeAdmin(id: number) {
+    async removeAdmin(id: number): Promise<User> {
       const user = await this.findOne(id);
       return this.usersRepository.save({...user, admin: false});
     }
 
-    async buyTicket(userId: number, ticketId: number) { //temp method
+    async buyTicket(userId: number, ticketId: number): Promise<User> { //temp method
       const user = await this.findOne(userId);
       const ticket = await this.ticketsService.findOne(ticketId);
       user.addTicket(ticket);

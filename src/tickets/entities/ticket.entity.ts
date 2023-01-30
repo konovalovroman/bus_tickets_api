@@ -1,7 +1,6 @@
-import { Logger } from "@nestjs/common";
 import { Trip } from "src/trips/entities/trip.entity";
 import { User } from "src/users/entities/user.entity";
-import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, Table } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn,  } from "typeorm";
 
 @Entity({ name: 'tickets', synchronize: false })
 export class Ticket {

@@ -12,7 +12,7 @@ export class TicketsService {
     private readonly tripsService: TripsService,
   ) {}
 
-  async create(createTicketDto: CreateUpdateTicketDto) {
+  async create(createTicketDto: CreateUpdateTicketDto): Promise<Ticket> {
     const { departure_date, arrival_date, trip_id, price } = createTicketDto;
     const newTicket = new Ticket();
     newTicket.trip = await this.tripsService.findOne(trip_id);
@@ -22,7 +22,7 @@ export class TicketsService {
     return this.ticketsRepository.save(newTicket);
   }
 
-  async findAll() {
+  async findAll(): Promise<Ticket[]> {
     return this.ticketsRepository.find({
       relations: [
         'trip'
@@ -30,7 +30,7 @@ export class TicketsService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Ticket> {
     const ticket = await this.ticketsRepository.findOne({
       where: {
         id,
@@ -43,7 +43,7 @@ export class TicketsService {
     return ticket;
   }
 
-  async update(id: number, updateTicketDto: Partial<CreateUpdateTicketDto>) {
+  async update(id: number, updateTicketDto: Partial<CreateUpdateTicketDto>): Promise<Ticket> {
     const { trip_id, ...rest } = updateTicketDto;
     const ticket = await this.findOne(id);
     if (trip_id) {
@@ -53,7 +53,7 @@ export class TicketsService {
     return this.ticketsRepository.save(ticket);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Ticket> {
     const ticket = await this.findOne(id);
     await this.ticketsRepository.delete(id);
     return ticket;
